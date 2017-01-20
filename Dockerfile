@@ -1,23 +1,23 @@
-FROM        ubuntu:14.04
+FROM        ubuntu:16.04
 MAINTAINER  Love Nyberg "love.nyberg@lovemusic.se"
-ENV REFRESHED_AT 2015-04-03
+ENV REFRESHED_AT 2016-01-20
 
 # Update system
 RUN apt-get update && \
 	apt-get install -y wget curl dnsutils python-pip python-dev python-apt software-properties-common dmidecode
 
-# Setup salt ppa
-RUN echo deb http://ppa.launchpad.net/saltstack/salt/ubuntu `lsb_release -sc` main | tee /etc/apt/sources.list.d/saltstack.list && \
-	wget -q -O- "http://keyserver.ubuntu.com:11371/pks/lookup?op=get&search=0x4759FA960E27C0A6" | apt-key add -
-
+# Setup salt repo
+RUN wget -O - https://repo.saltstack.com/apt/ubuntu/16.04/amd64/2016.11/SALTSTACK-GPG-KEY.pub | sudo apt-key add - && \
+    echo "deb http://repo.saltstack.com/apt/ubuntu/16.04/amd64/2016.11 xenial main" > /etc/apt/sources.list.d/saltstack.list
+	
 # Install salt master/minion/cloud/api
-ENV SALT_VERSION 2014.7.2+ds-1trusty2
 RUN apt-get update && \
-	apt-get install -y salt-master=$SALT_VERSION salt-minion=$SALT_VERSION \
-	salt-cloud=$SALT_VERSION salt-api=$SALT_VERSION
+	apt-get install -y salt-master salt-minion \
+	salt-cloud salt-api
 
+# DEPRECATED: https://groups.google.com/forum/#!msg/salt-users/rmMWLSaw0RY/N5PGRqDkwQgJ
 # Setup halite
-RUN pip install cherrypy docker-py halite
+# RUN pip install cherrypy docker-py halite
 
 # Add salt config files
 ADD etc/master /etc/salt/master
