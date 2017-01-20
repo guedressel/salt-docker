@@ -1,3 +1,6 @@
+
+*Notice*: This is forked from [jacksoncage/salt-docker](https://github.com/jacksoncage/salt-docker)
+
 Easy Salt testing with Docker
 ===========
 
@@ -11,8 +14,8 @@ Salt master is auto accepting all minions.
 
 ### Supported tags and respective `Dockerfile` links
 
- - **latest** [(2014.7.2+ds-1trusty2/Dockerfile)](https://github.com/jacksoncage/salt-docker/blob/master/Dockerfile)
- - **2014.7.2** [(2014.7.2+ds-1trusty2/Dockerfile)](https://github.com/jacksoncage/salt-docker/blob/version/2014.7.2/Dockerfile)
+ - **latest** [(2016.11/Dockerfile)](https://github.com/guedressel/salt-docker/blob/master/Dockerfile)
+ - **2016.11** [(2016.11/Dockerfile)](https://github.com/guedressel/salt-docker/blob/version/2016.11/Dockerfile)
 
 ## Get it running
 
@@ -23,12 +26,15 @@ Run one container with a master/minion setup.
 ```
 docker run -i -t --name=saltdocker_master_1 -h master -p 4505 -p 4506 \
    -p 8080 -p 8081 -e SALT_NAME=master -e SALT_USE=master \
-   -v `pwd`/srv/salt:/srv/salt:rw jacksoncage/salt
+   -v `pwd`/srv/salt:/srv/salt:rw bigap/salt
 ```
 
 By jumping in with `docker exec -i -t saltdocker_master_1 bash` your able to test/troubleshoot. Now your ready to write you states and test them out.
 
-### Salt cluster with docker compose
+### Salt cluster with docker compose (Untested!)
+
+*Notice:* Following mode of operation is here because of jacksoncage's original work but not tested by guedressel
+
 
 Using docker [machine](https://github.com/docker/machine) and [composer](https://github.com/docker/compose) to get a multi-minion setup. Copy and configure `docker-compose.yml.example` to `docker-compose.yml` and run the following
 
@@ -66,14 +72,14 @@ Following paths can be mounted from the container. `/srv/salt` is needed to run 
 The pre built image can be downloaded using docker directly. After that you do not need to use this command again, you will have the image on your local computer.
 
 ```
-docker pull jacksoncage/salt
+docker pull bigap/salt
 ```
 
 ### Build the docker image by yourself
 If you prefer you can easily build the docker image by yourself. After this the image is ready for use on your machine and can be used for multiple starts.
 
 ```
-git clone git@github.com:jacksoncage/salt-docker.git
+git clone git@github.com:guedressel/salt-docker.git
 cd salt-docker
-docker build -t jacksoncage/salt .
+docker build -t bigap/salt .
 ```
